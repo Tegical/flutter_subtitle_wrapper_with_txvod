@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:subtitle_wrapper_package_with_txvod/subtitle_wrapper_package.dart';
 import 'package:super_player/super_player.dart';
 
@@ -61,11 +60,11 @@ class SubtitleBloc extends Bloc<SubtitleEvent, SubtitleState> {
         }
         // final currentProgress = event['EVT_PLAY_PROGRESS'] as num;
         // final videoDuration = event['EVT_PLAY_DURATION'] as num;
-        final currentProgressInMills = event['EVT_PLAY_PROGRESS_MS'] as int;
+        final currentProgress = event['EVT_PLAY_PROGRESS'] as num;
+        final currentProgressInMills = currentProgress * 1000.0;
         // debugPrint('loadSubtitle $currentProgressInMills');
         if (subtitles.subtitles.isNotEmpty &&
-            currentProgressInMills >
-                subtitles.subtitles.last.endTime.inMilliseconds) {
+            currentProgress > subtitles.subtitles.last.endTime.inMilliseconds) {
           add(CompletedShowingSubtitles());
         }
         for (final subtitleItem in subtitles.subtitles) {
