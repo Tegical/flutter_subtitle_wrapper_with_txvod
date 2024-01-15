@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:subtitle_wrapper_package/data/models/subtitle.dart';
-import 'package:subtitle_wrapper_package/data/repository/subtitle_repository.dart';
-import 'package:subtitle_wrapper_package/subtitle_controller.dart';
+import 'package:subtitle_wrapper_package_with_txvod/data/models/subtitle.dart';
+import 'package:subtitle_wrapper_package_with_txvod/data/repository/subtitle_repository.dart';
+import 'package:subtitle_wrapper_package_with_txvod/subtitle_controller.dart';
 
 void main() {
   final subtitleController = SubtitleController(

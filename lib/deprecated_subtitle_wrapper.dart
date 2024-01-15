@@ -1,4 +1,4 @@
-import 'package:subtitle_wrapper_package/subtitle_wrapper_package.dart';
+import 'package:subtitle_wrapper_package_with_txvod/subtitle_wrapper_package.dart';
 
 // ignore: prefer-match-file-name, this has a different name because of the deprecation.
 class SubTitleWrapper extends SubtitleWrapper {

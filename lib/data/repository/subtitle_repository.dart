@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'package:subtitle_wrapper_package/subtitle_wrapper_package.dart';
+import 'package:subtitle_wrapper_package_with_txvod/subtitle_wrapper_package.dart';
 
 abstract class SubtitleRepository {
   Future<Subtitles> getSubtitles();
@@ -187,7 +187,8 @@ class SubtitleDataRepository extends SubtitleRepository {
   }
 
   // Extract the encoding type from the headers.
-  Encoding _encodingForHeaders(Map<String, String> headers) => encodingForCharset(
+  Encoding _encodingForHeaders(Map<String, String> headers) =>
+      encodingForCharset(
         _contentTypeForHeaders(headers).parameters['charset'],
       );
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:subtitle_wrapper_package/subtitle_wrapper_package.dart';
+import 'package:subtitle_wrapper_package_with_txvod/subtitle_wrapper_package.dart';
 
 const _defaultFontSize = 16.0;
 

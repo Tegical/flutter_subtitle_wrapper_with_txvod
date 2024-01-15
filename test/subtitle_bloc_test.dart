@@ -1,13 +1,13 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:subtitle_wrapper_package/bloc/subtitle/subtitle_bloc.dart';
-import 'package:subtitle_wrapper_package/data/models/subtitle.dart';
-import 'package:subtitle_wrapper_package/data/repository/subtitle_repository.dart';
-import 'package:subtitle_wrapper_package/subtitle_controller.dart';
-import 'package:video_player/video_player.dart';
+import 'package:subtitle_wrapper_package_with_txvod/bloc/subtitle/subtitle_bloc.dart';
+import 'package:subtitle_wrapper_package_with_txvod/data/models/subtitle.dart';
+import 'package:subtitle_wrapper_package_with_txvod/data/repository/subtitle_repository.dart';
+import 'package:subtitle_wrapper_package_with_txvod/subtitle_controller.dart';
+import 'package:super_player/super_player.dart';
 
-class MockVideoPlayerController extends Mock implements VideoPlayerController {}
+class MockVideoPlayerController extends Mock implements TXVodPlayerController {}
 
 void main() {
   final subtitleController = SubtitleController(
@@ -25,7 +25,7 @@ void main() {
           subtitleRepository: SubtitleDataRepository(
             subtitleController: subtitleController,
           ),
-          videoPlayerController: MockVideoPlayerController(),
+          txVodPlayerController: MockVideoPlayerController(),
         ),
         act: (SubtitleBloc bloc) => bloc.add(
           InitSubtitles(
@@ -43,7 +43,7 @@ void main() {
           subtitleRepository: SubtitleDataRepository(
             subtitleController: subtitleController,
           ),
-          videoPlayerController: MockVideoPlayerController(),
+          txVodPlayerController: MockVideoPlayerController(),
         ),
         act: (SubtitleBloc bloc) => bloc.add(
           UpdateLoadedSubtitle(
@@ -76,10 +76,10 @@ void main() {
           subtitleRepository: SubtitleDataRepository(
             subtitleController: subtitleController,
           ),
-          videoPlayerController: MockVideoPlayerController(),
+          txVodPlayerController: MockVideoPlayerController(),
         ),
         act: (SubtitleBloc bloc) {
-          bloc.videoPlayerController.notifyListeners();
+          bloc.txVodPlayerController.notifyListeners();
           return bloc.add(
             LoadSubtitle(),
           );

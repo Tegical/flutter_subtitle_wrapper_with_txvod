@@ -1,4 +1,4 @@
-import 'package:subtitle_wrapper_package/data/models/subtitle.dart';
+import 'package:subtitle_wrapper_package_with_txvod/data/models/subtitle.dart';
 
 class Subtitles {
   Subtitles({

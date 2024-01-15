@@ -1,4 +1,4 @@
-import 'package:subtitle_wrapper_package/bloc/subtitle/subtitle_bloc.dart';
+import 'package:subtitle_wrapper_package_with_txvod/bloc/subtitle/subtitle_bloc.dart';
 
 class SubtitleController {
   SubtitleController({
@@ -22,6 +22,7 @@ class SubtitleController {
   }
 
   void detach() {
+    _subtitleBloc?.close();
     _attached = false;
     _subtitleBloc = null;
   }
