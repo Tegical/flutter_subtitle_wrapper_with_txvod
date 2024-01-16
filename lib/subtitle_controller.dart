@@ -22,7 +22,6 @@ class SubtitleController {
   }
 
   void detach() {
-    _subtitleBloc?.close();
     _attached = false;
     _subtitleBloc = null;
   }
