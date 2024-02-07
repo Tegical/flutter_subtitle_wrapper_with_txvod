@@ -40,57 +40,59 @@ class SubtitleBloc extends Bloc<SubtitleEvent, SubtitleState> {
     emit(SubtitleInitialized());
   }
 
+  void onPlayerEventBroadcast(Map<dynamic, dynamic> event) {
+    if (!event.containsKey('event')) {
+      return;
+    }
+    final eventType = event['event'];
+    // debugPrint('onPlayerEventBroadcast event: $eventType');
+    if (eventType == TXVodPlayEvent.PLAY_EVT_PLAY_PROGRESS) {
+      // debugPrint('subtitle PLAY_EVT_PLAY_PROGRESS event: $event');
+      if (!event.containsKey('EVT_PLAY_PROGRESS') ||
+          !event.containsKey('EVT_PLAY_DURATION')) {
+        return;
+      }
+      // final currentProgress = event['EVT_PLAY_PROGRESS'] as num;
+      // final videoDuration = event['EVT_PLAY_DURATION'] as num;
+      final currentProgress = event['EVT_PLAY_PROGRESS'] as num;
+      final currentProgressInMills = currentProgress * 1000.0;
+      // debugPrint('loadSubtitle $currentProgressInMills');
+      if (subtitles.subtitles.isNotEmpty &&
+          currentProgress > subtitles.subtitles.last.endTime.inMilliseconds) {
+        emit(CompletedSubtitle());
+        // add(CompletedShowingSubtitles());
+      }
+      for (final subtitleItem in subtitles.subtitles) {
+        final validStartTime =
+            currentProgressInMills > subtitleItem.startTime.inMilliseconds;
+        final validEndTime =
+            currentProgressInMills < subtitleItem.endTime.inMilliseconds;
+        final subtitle = validStartTime && validEndTime ? subtitleItem : null;
+        if (validStartTime && validEndTime && subtitle != _currentSubtitle) {
+          _currentSubtitle = subtitle;
+        } else if (!_currentSubtitleIsValid(
+          videoPlayerPosition: currentProgressInMills.toInt(),
+        )) {
+          _currentSubtitle = null;
+        }
+        emit(LoadedSubtitle(_currentSubtitle));
+        // add(
+        //   UpdateLoadedSubtitle(
+        //     subtitle: _currentSubtitle,
+        //   ),
+        // );
+      }
+    }
+    if (eventType == TXVodPlayEvent.PLAY_EVT_PLAY_END) {}
+    if (eventType == TXVodPlayEvent.PLAY_EVT_PLAY_BEGIN) {}
+  }
+
   Future<void> loadSubtitle({
     required Emitter<SubtitleState> emit,
   }) async {
     emit(LoadingSubtitle());
 
-    await txVodPlayerController.onPlayerEventBroadcast
-        .listen((Map<dynamic, dynamic> event) async {
-      if (!event.containsKey('event')) {
-        return;
-      }
-      final eventType = event['event'];
-      // debugPrint('onPlayerEventBroadcast event: $eventType');
-      if (eventType == TXVodPlayEvent.PLAY_EVT_PLAY_PROGRESS) {
-        // debugPrint('subtitle PLAY_EVT_PLAY_PROGRESS event: $event');
-        if (!event.containsKey('EVT_PLAY_PROGRESS') ||
-            !event.containsKey('EVT_PLAY_DURATION')) {
-          return;
-        }
-        // final currentProgress = event['EVT_PLAY_PROGRESS'] as num;
-        // final videoDuration = event['EVT_PLAY_DURATION'] as num;
-        final currentProgress = event['EVT_PLAY_PROGRESS'] as num;
-        final currentProgressInMills = currentProgress * 1000.0;
-        // debugPrint('loadSubtitle $currentProgressInMills');
-        if (subtitles.subtitles.isNotEmpty &&
-            currentProgress > subtitles.subtitles.last.endTime.inMilliseconds) {
-          add(CompletedShowingSubtitles());
-        }
-        for (final subtitleItem in subtitles.subtitles) {
-          final validStartTime =
-              currentProgressInMills > subtitleItem.startTime.inMilliseconds;
-          final validEndTime =
-              currentProgressInMills < subtitleItem.endTime.inMilliseconds;
-          final subtitle = validStartTime && validEndTime ? subtitleItem : null;
-          if (validStartTime && validEndTime && subtitle != _currentSubtitle) {
-            _currentSubtitle = subtitle;
-          } else if (!_currentSubtitleIsValid(
-            videoPlayerPosition: currentProgressInMills.toInt(),
-          )) {
-            _currentSubtitle = null;
-          }
-          // emit(LoadedSubtitle(_currentSubtitle));
-          add(
-            UpdateLoadedSubtitle(
-              subtitle: _currentSubtitle,
-            ),
-          );
-        }
-      }
-      if (eventType == TXVodPlayEvent.PLAY_EVT_PLAY_END) {}
-      if (eventType == TXVodPlayEvent.PLAY_EVT_PLAY_BEGIN) {}
-    });
+    txVodPlayerController.onPlayerEventBroadcast.listen(onPlayerEventBroadcast);
     // txVodPlayerController.addListener(
     //   () {
     //     final videoPlayerPosition = txVodPlayerController.value.position;
