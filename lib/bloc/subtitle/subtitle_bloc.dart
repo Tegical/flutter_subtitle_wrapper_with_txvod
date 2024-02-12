@@ -59,8 +59,8 @@ class SubtitleBloc extends Bloc<SubtitleEvent, SubtitleState> {
       // debugPrint('loadSubtitle $currentProgressInMills');
       if (subtitles.subtitles.isNotEmpty &&
           currentProgress > subtitles.subtitles.last.endTime.inMilliseconds) {
-        emit(CompletedSubtitle());
-        // add(CompletedShowingSubtitles());
+        // emit(CompletedSubtitle());
+        add(CompletedShowingSubtitles());
       }
       for (final subtitleItem in subtitles.subtitles) {
         final validStartTime =
@@ -75,12 +75,12 @@ class SubtitleBloc extends Bloc<SubtitleEvent, SubtitleState> {
         )) {
           _currentSubtitle = null;
         }
-        emit(LoadedSubtitle(_currentSubtitle));
-        // add(
-        //   UpdateLoadedSubtitle(
-        //     subtitle: _currentSubtitle,
-        //   ),
-        // );
+        // emit(LoadedSubtitle(_currentSubtitle));
+        add(
+          UpdateLoadedSubtitle(
+            subtitle: _currentSubtitle,
+          ),
+        );
       }
     }
     if (eventType == TXVodPlayEvent.PLAY_EVT_PLAY_END) {}
